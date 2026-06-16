@@ -7,8 +7,17 @@ export const SuperpowersPlugin = async () => {
   const superpowersSkillsDir = path.resolve(__dirname, "../../skills");
 
   return {
-    // 只注册 skills，让你可以手动 use skill tool to load ...
     config: async (config) => {
+      const enabled =
+        process.env.SUPERPOWERS === "1" ||
+        process.env.SUPERPOWERS === "true" ||
+        process.env.SUPER === "1" ||
+        process.env.SUPER === "true";
+
+      if (!enabled) {
+        return;
+      }
+
       config.skills = config.skills || {};
       config.skills.paths = config.skills.paths || [];
 
@@ -16,8 +25,5 @@ export const SuperpowersPlugin = async () => {
         config.skills.paths.push(superpowersSkillsDir);
       }
     },
-
-    // 不再注入 using-superpowers bootstrap
-    // 不再添加 experimental.chat.messages.transform
   };
 };
